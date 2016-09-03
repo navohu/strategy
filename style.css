@@ -1,0 +1,17 @@
+.centre-block{
+	display: table;
+	margin: 0 auto;
+}
+
+/*.row{
+	display: table;
+  	min-height: 400px;
+	width: 100%;
+}
+
+[class*="col-"] {
+  float: none;
+  display: table-cell;
+  vertical-align: top;
+}
+*/
