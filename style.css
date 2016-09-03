@@ -3,15 +3,14 @@
 	margin: 0 auto;
 }
 
-/*.row{
-	display: table;
-  	min-height: 400px;
-	width: 100%;
+.score{
+	font-size: 4em;
 }
 
-[class*="col-"] {
-  float: none;
-  display: table-cell;
-  vertical-align: top;
+.top-buffer{
+	margin-top: 50px;
 }
-*/
+
+.row{
+	min-height: 200px;
+}

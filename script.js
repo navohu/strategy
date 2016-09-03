@@ -34,24 +34,40 @@ $(document).ready(function(){
 		var score = player.text();
 		score ++;
 		player.text(score);
-		console.log(score);
 	}
 
 	var play = function(){
 		var card = $('.front');
 		var card_class = card.attr('class');
-		if (card_class.indexOf('red') !== -1) { //The card is red
-			console.log("It's red.");
-			changeScore($('#you'));
+		var you = $('#you');
+		var opponent = $('#opponent');
+		if(eval(you.text()) + eval(opponent.text())>53){ alert("You have used all 52 cards"); return; } // Stop after 52 cards
+		if(card_class.indexOf('red') !== -1 ) { //The card is red
+			changeScore(opponent);
 		}
 		else{
-			changeScore($('#opponent'));
+			changeScore(you);
 		}
+	}
+
+	var lead = function(){
+		var you = $('#you');
+		var opponent = $('#opponent');
+		var result = parseInt(you.text()) - parseInt(opponent.text());
+		$("#lead").text(result);
 	}
 
 	cardDeck.shuffle();
 	$('#draw').click(function(){
 		draw_card();
 		play();
+		lead();
+	});
+	$('#stop').click(function(){
+		//write message of how much you earned
+		//create a history of records of highest score
+	});
+	$('#restart').click(function(){
+
 	});
 });
