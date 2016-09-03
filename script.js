@@ -30,8 +30,28 @@ $(document).ready(function(){
 		showHand();
 	}
 
+	var changeScore = function(player){
+		var score = player.text();
+		score ++;
+		player.text(score);
+		console.log(score);
+	}
+
+	var play = function(){
+		var card = $('.front');
+		var card_class = card.attr('class');
+		if (card_class.indexOf('red') !== -1) { //The card is red
+			console.log("It's red.");
+			changeScore($('#you'));
+		}
+		else{
+			changeScore($('#opponent'));
+		}
+	}
+
 	cardDeck.shuffle();
 	$('#draw').click(function(){
 		draw_card();
+		play();
 	});
 });
