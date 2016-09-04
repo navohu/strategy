@@ -56,7 +56,6 @@ $(document).ready(function(){
 		var result = parseInt(you.text()) - parseInt(opponent.text());
 		$("#lead").text(result);
 	}
-
 	cardDeck.shuffle();
 	$('#draw').click(function(){
 		draw_card();
@@ -68,6 +67,6 @@ $(document).ready(function(){
 		//create a history of records of highest score
 	});
 	$('#restart').click(function(){
-
+		//reset everything to the start
 	});
 });

@@ -11,38 +11,48 @@
 	
 
     <h2 class="text-center">Play</h2>
-    <div class="row top-buffer">
-    	<div class="col-xs-4 col-md-4 col-lg-4">
+    <div class="row top-buffer row-big">
+    	<div class="col-sm-4 col-md-4 col-lg-4">
     		<h4 class="text-center">Your Score</h4>
     		<div id="you" class="text-center score text-success">0</div>
     	</div>
-    	<div class="col-xs-4 col-md-4 col-lg-4">
-			<input type="button" id="draw" value="Play" class="form-control"/> <br>
+    	<div class="col-sm-4 col-md-4 col-lg-4">
+			<input type="button" id="draw" value="Play" class="form-control btn btn-success"/>
     		<div class="centre-block">
-    			<div class="text-center" id="yourHand"></div>
+    			<br><div class="text-center" id="yourHand"></div>
     		</div>
     	</div>
-    	<div class="col-xs-4 col-md-4 col-lg-4">
+    	<div class="col-sm-4 col-md-4 col-lg-4">
     		<h4 class="text-center">Your Opponent's Score</h4>
     		<div id="opponent" class="text-center score text-danger">0</div>
     	</div>
     </div>
-	<input type="button" id="stop" value="Stop" class="form-control"/>
-	<input type="button" id="restart" value="Start Over" class="form-control"/>
+    <div class="row">
+    	<div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-4 col-md-offset-4">
+    		<input type="button" id="stop" value="Stop" class="form-control btn btn-danger"/><br>
+    	</div>
+    	<div class="col-sm-4 col-md-4 col-lg-4 col-sm-offset-4 col-md-offset-4">
+			<br><input type="button" id="restart" value="Start Over" class="form-control btn btn-warning"/>
+    	</div>
+    </div>
     <div class="row top-buffer">
-    	<div class="col-xs-4 col-md-4 col-lg-4 text-center">
+    	<div class="col-sm-4 col-md-4 col-lg-4 text-center">
     		<h4>Your Lead</h4>
     		<div class="score" id="lead"></div>
     	</div>
-    	<div class="col-xs-9 col-md-9 col-lg-9 text-center"></div>
+    	<div class="col-sm-8 col-md-8 col-lg-8">
     		<h4>Statistics</h4>
+    		<svg id="statistics"></svg>
+    	</div>
     </div>
 
 
 
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script type="text/javascript" src="lib/JavaScript-Playing-Cards/playingCards.js"></script>
 	<script type="text/javascript" src="lib/JavaScript-Playing-Cards/playingCards.ui.js"></script>
+	<script type="text/javascript" src="vis.js"></script>
 	<script type="text/javascript" src="script.js"></script>
 </body>
 </html>
