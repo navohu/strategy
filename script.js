@@ -1,8 +1,6 @@
 
 $(document).ready(function(){
-	var cardDeck = $('#cardDeck').playingCards();
-	cardDeck.init();
-	cardDeck.shuffle();
+	var cardDeck = new playingCards();
 	var hand = [];
 
 	$('#draw').click(function(){
