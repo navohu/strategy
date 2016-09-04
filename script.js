@@ -3,10 +3,14 @@ $(document).ready(function(){
 	var cardDeck = new playingCards();
 	var hand = [];
 
+	var tickIteration = 1;
+
 	$('#draw').click(function(){
 		drawCard();
 		play();
 		lead();
+		updateGraph(parseInt(tickIteration), probability()*100);
+		tickIteration++;
 	});
 	$('#stop').click(function(){
 		//write message of how much you earned
@@ -70,7 +74,8 @@ $(document).ready(function(){
 	}
 
 	var probability = function(){
-		var red_left = 26 - parseInt($('#you').text());
+		var red_left = 28 - parseInt($('#you').text());
 		return (red_left/54);
 	}
+
 });
