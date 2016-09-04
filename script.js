@@ -19,7 +19,7 @@ $(document).ready(function(){
 		// }
 	}
 	
-	var draw_card = function(){
+	var drawCard = function(){
 		var draw = cardDeck.draw();
 		if(!draw){
 			showError("No more cards.");
@@ -58,7 +58,7 @@ $(document).ready(function(){
 	}
 	cardDeck.shuffle();
 	$('#draw').click(function(){
-		draw_card();
+		drawCard();
 		play();
 		lead();
 	});
