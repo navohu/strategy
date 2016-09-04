@@ -1,10 +1,11 @@
 var ymin = 47,
     ymax = 52;
 
+var probabilities = [];
 var margin = {top: 20, right: 40, bottom: 30, left: 40},
     width = $("#statistics").parent().width() - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom,
-    barWidth = Math.floor(width / 19) - 1;
+    height = 200 - margin.top - margin.bottom,
+    barWidth = Math.floor(width / probabilities.length) - 1;
 
 var x = d3.scaleLinear()
     .range([barWidth / 2, width - barWidth / 2]);
@@ -19,7 +20,7 @@ var yAxis = d3.axisLeft()
     .tickSize(-width)
     .tickFormat(function(d) { return Math.round(d*10)/10 + "%"; });
 
-var probabilities = [];
+
 
 // An SVG element with a bottom-right origin.
 var svg = d3.select("#statistics").append("svg")
@@ -73,20 +74,23 @@ var updateGraph = function(iteration, barheight){
   var h = 100;
   var barPadding = 1;
 
-  svg.selectAll("rect")
-     .data(probabilities)
-     .enter()
-     .append("rect")
+  svg.select("rect")
+    .data(probabilities)
+    .enter()
+    .append("rect")
      .attr("x", function(d, i) {
           return i * (width / probabilities.length);  //Bar width of 20 plus 1 for padding
       })
      .attr("y", function(d) {
           return y(d.y);  //Height minus data value
       })
-     .attr("width", w / probabilities.length - barPadding)
+     .attr("width", width / probabilities.length - barPadding)
+    .transition()
      .attr("height", function(d){
         return height - y(d.y);
      });
+
+
 
 }
 
