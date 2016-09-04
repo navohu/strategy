@@ -2,7 +2,21 @@
 $(document).ready(function(){
 	var cardDeck = $('#cardDeck').playingCards();
 	cardDeck.init();
+	cardDeck.shuffle();
 	var hand = [];
+
+	$('#draw').click(function(){
+		drawCard();
+		play();
+		lead();
+	});
+	$('#stop').click(function(){
+		//write message of how much you earned
+		//create a history of records of highest score
+	});
+	$('#restart').click(function(){
+		//reset everything to the start
+	});
 
 	var showError = function(msg){
 		$('#error').html(msg).show();
@@ -61,18 +75,4 @@ $(document).ready(function(){
 		var red_left = 26 - parseInt($('#you').text());
 		return (red_left/54);
 	}
-
-	cardDeck.shuffle();
-	$('#draw').click(function(){
-		drawCard();
-		play();
-		lead();
-	});
-	$('#stop').click(function(){
-		//write message of how much you earned
-		//create a history of records of highest score
-	});
-	$('#restart').click(function(){
-		//reset everything to the start
-	});
 });
