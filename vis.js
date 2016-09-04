@@ -1,6 +1,9 @@
+var ymin = 47,
+    ymax = 52;
+
 var margin = {top: 20, right: 40, bottom: 30, left: 40},
     width = $("#statistics").parent().width() - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom,
+    height = 300 - margin.top - margin.bottom,
     barWidth = Math.floor(width / 19) - 1;
 
 var x = d3.scaleLinear()
@@ -8,12 +11,13 @@ var x = d3.scaleLinear()
 
 var y = d3.scaleLinear()
     .range([height, 0])
-    .domain([0,50]);
+    .domain([ymin,ymax]);
 
 var yAxis = d3.axisLeft()
     .scale(y)
+    .ticks(5)
     .tickSize(-width)
-    .tickFormat(function(d) { return Math.round(d) + "%"; });
+    .tickFormat(function(d) { return Math.round(d*10)/10 + "%"; });
 
 var probabilities = [];
 
@@ -40,12 +44,13 @@ var updateGraph = function(iteration, barheight){
 
   var y = d3.scaleLinear()
     .range([height, 0])
-    .domain([0,50]);
+    .domain([getMaxYDomain(barheight), getMinYDomain(barheight)]);
 
   var yAxis = d3.axisLeft()
     .scale(y)
+    .ticks(5)
     .tickSize(-width)
-    .tickFormat(function(d) { return Math.round(d) + "%"; });
+    .tickFormat(function(d) { return Math.round(d*10)/10 + "%"; });
 
   var svg = d3.select("#statistics").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -76,12 +81,27 @@ var updateGraph = function(iteration, barheight){
           return i * (width / probabilities.length);  //Bar width of 20 plus 1 for padding
       })
      .attr("y", function(d) {
-          return height - d.y * 10;  //Height minus data value
+          return y(d.y);  //Height minus data value
       })
      .attr("width", w / probabilities.length - barPadding)
      .attr("height", function(d){
-        return d.y * 10;
+        return height - y(d.y);
      });
 
 }
 
+function getMinYDomain(y){
+  if(ymin<y) {
+    ymin = y+0.5;
+    return ymin;
+  }
+  else return ymin;
+}
+
+function getMaxYDomain(y){
+  if(ymax>y){
+    ymax = y - 0.5;
+    return ymax;
+  }
+  else return ymax;
+}
