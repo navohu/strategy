@@ -56,6 +56,12 @@ $(document).ready(function(){
 		var result = parseInt(you.text()) - parseInt(opponent.text());
 		$("#lead").text(result);
 	}
+
+	var probability = function(){
+		var red_left = 26 - parseInt($('#you').text());
+		return (red_left/54);
+	}
+
 	cardDeck.shuffle();
 	$('#draw').click(function(){
 		drawCard();
