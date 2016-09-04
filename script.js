@@ -11,7 +11,7 @@ $(document).ready(function(){
 		},3000);
 	}
 	var showHand = function(){
-		var el = $('#yourHand')
+		var el = $('#currentCard')
 		el.html('');
 		el.append(hand[hand.length-1].getHTML());
 		// for(var i=0;i<hand.length;i++){
