@@ -36,37 +36,57 @@ var svg = d3.select("#statistics").append("svg")
       .classed("zero", true);
 
 var updateGraph = function(iteration, barheight){
-  //  d3.select('#statistics').selectAll("*").remove();
-
+  probabilities.push({x: iteration, y: barheight});
+  var data = getLastFiveData(probabilities);
   y.domain([getMaxYDomain(barheight), getMinYDomain(barheight)]); //dynamic y-axis
-
-  // same for yAxis but with more transform and a title
   svg.select(".y.axis").transition().duration(300).call(yAxis);
 
-  probabilities.push({x: iteration, y: barheight});
   //Width and height
-
-  var bars = svg.selectAll(".bar").data(probabilities, function(d) { return d.y; }) // (data) is an array/iterable thing, second argument is an ID generator function
+  var barPadding = 1;
+  var bars = svg.selectAll(".bar").data(data, function(d) { return d.y; })
 
   bars.exit()
     .transition()
       .duration(300)
     .attr("y", y(0))
-    .attr("height", height - y(0))
+    .attr("height", Math.abs(height - y(0)))
     .style('fill-opacity', 1e-6)
     .remove();
 
-  // data that needs DOM = enter() (a set/selection, not an event!)
   bars.enter().append("rect")
     .attr("class", "bar")
     .attr("y", function(d) {return y(d.y);})
     .attr("height", function(d){return height - y(d.y);});
 
   // the "UPDATE" set:
-  bars.transition().duration(300).attr("x", function(d, i) {return i * (width / probabilities.length);})
-    .attr("width", width / probabilities.length - barPadding) // constant, so no callback function(d) here
+  bars.transition().duration(300).attr("x", function(d, i) {return i * (width / data.length);})
+    .attr("width", width / data.length - barPadding) 
     .attr("y", function(d) { return y(d.y); })
-    .attr("height", function(d) { return height - y(d.y); }); // flip the height, because y's domain is bottom up, but SVG renders top down
+    .attr("height", function(d) { return height - y(d.y); });
+
+  //Append text on each attribute
+  // svg.selectAll("text")
+  //   .data(probabilities)
+  //   .text(function(d) {
+  //     return d.y;
+  //   })
+  //   .attr("x", function(d, i) {
+  //       return i * (width / probabilities.length);
+  //   })
+  //   .attr("y", function(d) {
+  //       return y(d.y);
+  //   })
+  //   .attr("font-family", "sans-serif")
+  //   .attr("font-size", "11px")
+  //   .attr("fill", "red");
+}
+
+var getLastFiveData = function(data){
+  var arraylength = data.length;
+  if (arraylength < 5) {
+    return data;
+  }
+  return data.slice(arraylength - 5, arraylength+1);
 }
 
 function getMinYDomain(y){
