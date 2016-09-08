@@ -74,8 +74,10 @@ $(document).ready(function(){
 	}
 
 	var probability = function(){
-		var red_left = 28 - parseInt($('#you').text());
-		return (red_left/54);
+		var red_left = 27 - parseInt($('#you').text());
+		var black_left = 27 - parseInt($('#opponent').text());
+		var left_overall = red_left + black_left;
+		return (red_left/left_overall);
 	}
 
 });

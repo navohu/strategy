@@ -74,7 +74,7 @@ var updateGraph = function(iteration, barheight){
   var h = 100;
   var barPadding = 1;
 
-  svg.select("rect")
+  svg.selectAll("rect")
     .data(probabilities)
     .enter()
     .append("rect")
