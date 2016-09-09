@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 	var cardDeck = new playingCards();
 	var hand = [];
@@ -9,7 +8,6 @@ $(document).ready(function(){
 		drawCard();
 		play();
 		lead();
-		updateGraph(parseInt(tickIteration), probability()*100);
 		tickIteration++;
 	});
 	$('#stop').click(function(){
@@ -30,9 +28,6 @@ $(document).ready(function(){
 		var el = $('#currentCard')
 		el.html('');
 		el.append(hand[hand.length-1].getHTML());
-		// for(var i=0;i<hand.length;i++){
-		//     el.append(hand[i].getHTML());
-		// }
 	}
 	
 	var drawCard = function(){
@@ -52,20 +47,6 @@ $(document).ready(function(){
 		player.text(score);
 	}
 
-	var play = function(){
-		var card = $('.front');
-		var card_class = card.attr('class');
-		var you = $('#you');
-		var opponent = $('#opponent');
-		if(eval(you.text()) + eval(opponent.text())>53){ alert("You have used all 52 cards"); return; } // Stop after 52 cards
-		if(card_class.indexOf('red') !== -1 ) { //The card is red
-			changeScore(opponent);
-		}
-		else{
-			changeScore(you);
-		}
-	}
-
 	var lead = function(){
 		var you = $('#you');
 		var opponent = $('#opponent');
@@ -74,10 +55,25 @@ $(document).ready(function(){
 	}
 
 	var probability = function(){
-		var red_left = 27 - parseInt($('#you').text());
-		var black_left = 27 - parseInt($('#opponent').text());
+		var red_left = 26 - parseInt($('#you').text());
+		var black_left = 26 - parseInt($('#opponent').text());
 		var left_overall = red_left + black_left;
 		return (red_left/left_overall);
 	}
 
+	var play = function(){
+		var card = $('.front');
+		var card_class = card.attr('class');
+		var you = $('#you');
+		var opponent = $('#opponent');
+		updateGraph(parseInt(tickIteration), probability()*100);
+		
+		if(eval(you.text()) + eval(opponent.text())>51){ alert("You have used all 52 + 2 Joker cards"); return; } // Stop after 52 cards
+		if(card_class.indexOf('red') !== -1 ) { //The card is red
+			changeScore(opponent);
+		}
+		else{
+			changeScore(you);
+		}
+	}
 });

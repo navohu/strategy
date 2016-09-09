@@ -37,7 +37,7 @@ var svg = d3.select("#statistics").append("svg")
 
 var updateGraph = function(iteration, barheight){
   probabilities.push({x: iteration, y: barheight});
-  var data = getLastFiveData(probabilities);
+  var data = getLastFiveData(probabilities); //gets only five last new bars
   y.domain([getMaxYDomain(barheight), getMinYDomain(barheight)]); //dynamic y-axis
   svg.select(".y.axis").transition().duration(300).call(yAxis);
 
@@ -47,22 +47,32 @@ var updateGraph = function(iteration, barheight){
 
   bars.exit()
     .transition()
-      .duration(300)
+    .duration(500)
     .attr("y", y(0))
-    .attr("height", Math.abs(height - y(0)))
-    .style('fill-opacity', 1e-6)
     .remove();
 
-  bars.enter().append("rect")
+  bars.enter()
+    .append("rect")
     .attr("class", "bar")
-    .attr("y", function(d) {return y(d.y);})
-    .attr("height", function(d){return height - y(d.y);});
+    .attr("y", function(d) {return height - y(d.y);})
+    .attr("x", function(d, i) {
+      return i * (width / data.length);
+    })
+    .attr("height", function(d){return y(d.y);});
 
   // the "UPDATE" set:
-  bars.transition().duration(300).attr("x", function(d, i) {return i * (width / data.length);})
+  bars.transition()
+    .duration(500)
+    .attr("x", function(d, i) {
+      return i * (width / data.length);
+    })
+    .attr("y", function(d) { 
+      return height - y(d.y); 
+    })
     .attr("width", width / data.length - barPadding) 
-    .attr("y", function(d) { return y(d.y); })
-    .attr("height", function(d) { return height - y(d.y); });
+    .attr("height", function(d) { 
+      return y(d.y); 
+    });
 
   //Append text on each attribute
   // svg.selectAll("text")
