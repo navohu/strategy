@@ -1,3 +1,4 @@
+var probabilities = [];
 $(document).ready(function(){
 	var cardDeck = new playingCards();
 	var hand = [];
@@ -6,8 +7,8 @@ $(document).ready(function(){
 
 	$('#draw').click(function(){
 		drawCard();
-		play();
 		lead();
+		play();
 		tickIteration++;
 	});
 	$('#stop').click(function(){
@@ -61,19 +62,33 @@ $(document).ready(function(){
 		return (red_left/left_overall);
 	}
 
+	var getLastFiveData = function(data){
+	  var arraylength = data.length;
+	  if (arraylength < 6) {
+	    return data;
+	  }
+	  return data.slice(arraylength - 5, arraylength+1);
+	}
+
+	var draw = function(){
+		probabilities.push({x: parseInt(tickIteration), y: probability()});
+  		var data = getLastFiveData(probabilities); //gets only five last new bars
+  		console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
+		updateGraph(data);
+	}
+
 	var play = function(){
 		var card = $('.front');
 		var card_class = card.attr('class');
 		var you = $('#you');
 		var opponent = $('#opponent');
-		updateGraph(parseInt(tickIteration), probability()*100);
-		
-		if(eval(you.text()) + eval(opponent.text())>51){ alert("You have used all 52 + 2 Joker cards"); return; } // Stop after 52 cards
+		if(eval(you.text()) + eval(opponent.text())>51){ alert("You have used all 52 cards"); return; } // Stop after 52 cards
 		if(card_class.indexOf('red') !== -1 ) { //The card is red
 			changeScore(opponent);
 		}
 		else{
 			changeScore(you);
 		}
+		draw();
 	}
 });

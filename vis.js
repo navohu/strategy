@@ -1,24 +1,19 @@
-var ymin = 47,
-    ymax = 52;
-
-var probabilities = [];
 var margin = {top: 20, right: 40, bottom: 30, left: 40},
     width = $("#statistics").parent().width() - margin.left - margin.right,
-    height = 200 - margin.top - margin.bottom,
-    barWidth = Math.floor(width / probabilities.length) - 1;
+    height = 200 - margin.top - margin.bottom;
 
-var x = d3.scaleLinear()
-    .range([barWidth / 2, width - barWidth / 2]);
+var x = d3.scaleBand()
+    .rangeRound([0, width], .1);
 
 var y = d3.scaleLinear()
-    .range([height, 0])
-    .domain([ymin,ymax]);
+    .range([height, 0]);
+
+var xAxis = d3.axisBottom()
+    .scale(x);
 
 var yAxis = d3.axisLeft()
     .scale(y)
-    .ticks(5)
-    .tickSize(-width)
-    .tickFormat(function(d) { return Math.round(d*10)/10 + "%"; });
+    .ticks(5, "%");
 
 // An SVG element with a bottom-right origin.
 var svg = d3.select("#statistics").append("svg")
@@ -28,89 +23,66 @@ var svg = d3.select("#statistics").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   svg.append("g")
-      .attr("class", "y axis")
-      .attr("transform", "translate(0,0)")
-      .call(yAxis)
-    .selectAll("g")
-    .filter(function(value) { return !value; })
-      .classed("zero", true);
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
 
-var updateGraph = function(iteration, barheight){
-  probabilities.push({x: iteration, y: barheight});
-  var data = getLastFiveData(probabilities); //gets only five last new bars
-  y.domain([getMaxYDomain(barheight), getMinYDomain(barheight)]); //dynamic y-axis
+
+  svg.append("g")
+    .attr("class", "y axis")
+    // .call(yAxis)
+  .append("text") // just for the title (ticks are automatic)
+    .attr("transform", "rotate(-90)") // rotate the text!
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Probability");
+
+var updateGraph = function(data){
+  console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
+  x.domain(data.map(function(d) { return d.x; }));
+  y.domain([d3.min(data, function(d) { return d.y - 0.01; }), d3.max(data, function(d) { return d.y + 0.01; })]);
+  
+  svg.select('.x.axis').transition().duration(300).call(xAxis);
   svg.select(".y.axis").transition().duration(300).call(yAxis);
 
   //Width and height
-  var barPadding = 1;
-  var bars = svg.selectAll(".bar").data(data, function(d) { return d.y; })
+  var barPadding = -1;  
+  var bars = svg.selectAll(".bar").data(data);
 
   bars.exit()
     .transition()
-    .duration(500)
+    .duration(300)
     .attr("y", y(0))
+    .style('fill-opacity', 1e-6)
     .remove();
 
   bars.enter()
     .append("rect")
     .attr("class", "bar")
-    .attr("y", function(d) {return height - y(d.y);})
-    .attr("x", function(d, i) {
-      return i * (width / data.length);
+    .attr("x", function(d) {
+      return x(d.x);
     })
-    .attr("height", function(d){return y(d.y);});
+    .attr("y", function(d) {
+      return y(d.y);
+    })
+    .attr("width", x.bandwidth() + barPadding) 
+    .attr("height", function(d) {
+      return height - y(d.y); 
+    });
 
   // the "UPDATE" set:
   bars.transition()
-    .duration(500)
-    .attr("x", function(d, i) {
-      return i * (width / data.length);
+    .duration(300)
+    .attr("x", function(d) {
+      // console.log(d.x);
+      return x(d.x);
     })
-    .attr("y", function(d) { 
-      return height - y(d.y); 
-    })
-    .attr("width", width / data.length - barPadding) 
-    .attr("height", function(d) { 
+    .attr("y", function(d) {
+      // console.log(d.y); 
       return y(d.y); 
+    })
+    .attr("width", x.bandwidth() + barPadding) 
+    .attr("height", function(d) { 
+      return height - y(d.y); 
     });
-
-  //Append text on each attribute
-  // svg.selectAll("text")
-  //   .data(probabilities)
-  //   .text(function(d) {
-  //     return d.y;
-  //   })
-  //   .attr("x", function(d, i) {
-  //       return i * (width / probabilities.length);
-  //   })
-  //   .attr("y", function(d) {
-  //       return y(d.y);
-  //   })
-  //   .attr("font-family", "sans-serif")
-  //   .attr("font-size", "11px")
-  //   .attr("fill", "red");
-}
-
-var getLastFiveData = function(data){
-  var arraylength = data.length;
-  if (arraylength < 5) {
-    return data;
-  }
-  return data.slice(arraylength - 5, arraylength+1);
-}
-
-function getMinYDomain(y){
-  if(ymin<y) {
-    ymin = y+0.5;
-    return ymin;
-  }
-  else return ymin;
-}
-
-function getMaxYDomain(y){
-  if(ymax>y){
-    ymax = y - 0.5;
-    return ymax;
-  }
-  else return ymax;
 }
