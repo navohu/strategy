@@ -25,17 +25,22 @@ var svg = d3.select("#statistics").append("svg")
   svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
 
 
   svg.append("g")
     .attr("class", "y axis")
-    // .call(yAxis)
-  .append("text") // just for the title (ticks are automatic)
-    .attr("transform", "rotate(-90)") // rotate the text!
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
+    .call(yAxis);
+
+  svg.append("text") // just for the title (ticks are automatic)
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + 0 + "," + height/2 + ")rotate(-90)") // rotate the text!
     .text("Probability");
+
+  svg.append("text") // just for the title (ticks are automatic)
+    .attr("text-anchor", "middle")
+    .attr("transform", "translate(" + width/2 + "," + height + margin.bottom + ")") // rotate the text!
+    .text("Iteration");
 
 var updateGraph = function(data){
   console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
