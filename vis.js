@@ -43,12 +43,39 @@ var svg = d3.select("#statistics").append("svg")
     .text("Iteration");
 
 var updateGraph = function(data){
-  console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
+  // console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
   x.domain(data.map(function(d) { return d.x; }));
   y.domain([d3.min(data, function(d) { return d.y - 0.01; }), d3.max(data, function(d) { return d.y + 0.01; })]);
   
   svg.select('.x.axis').transition().duration(300).call(xAxis);
   svg.select(".y.axis").transition().duration(300).call(yAxis);
+  
+  var text = svg.selectAll(".bartext").data(data);
+  text.exit()
+    .transition()
+    .duration(300)
+    .attr("y", y(0))
+    .style('fill-opacity', 1e-6)
+    .remove();
+  
+  text.enter()
+    .append("text")
+    .attr("class", "bartext")
+    .attr("text-anchor", "middle")
+    .attr("fill", "black")
+    .text(function(){ console.log(data[data.length-1].y); return Math.round(data[data.length-1].y * 1000)/10;})
+    .attr("x", function(d){ 
+      return x(d.x) + x.bandwidth()/2;
+    })
+    .attr("y", function(d){ return y(d.y);});
+
+    // the "UPDATE" set:
+  text.transition()
+    .duration(300)
+    .attr("x", function(d){ 
+      return x(d.x) + x.bandwidth()/2;
+    })
+    .attr("y", function(d){ return y(d.y);});
 
   //Width and height
   var barPadding = -1;  
@@ -79,11 +106,9 @@ var updateGraph = function(data){
   bars.transition()
     .duration(300)
     .attr("x", function(d) {
-      // console.log(d.x);
       return x(d.x);
     })
     .attr("y", function(d) {
-      // console.log(d.y); 
       return y(d.y); 
     })
     .attr("width", x.bandwidth() + barPadding) 

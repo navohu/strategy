@@ -73,7 +73,7 @@ $(document).ready(function(){
 	var draw = function(){
 		probabilities.push({x: parseInt(tickIteration), y: probability()});
   		var data = getLastFiveData(probabilities); //gets only five last new bars
-  		console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
+  		// console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
 		updateGraph(data);
 	}
 
