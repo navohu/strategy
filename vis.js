@@ -27,7 +27,6 @@ var svg = d3.select("#statistics").append("svg")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis);
 
-
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis);
@@ -42,40 +41,46 @@ var svg = d3.select("#statistics").append("svg")
     .attr("transform", "translate(" + width/2 + "," + height + margin.bottom + ")") // rotate the text!
     .text("Iteration");
 
-var updateGraph = function(data){
-  // console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
-  x.domain(data.map(function(d) { return d.x; }));
-  y.domain([d3.min(data, function(d) { return d.y - 0.01; }), d3.max(data, function(d) { return d.y + 0.01; })]);
-  
-  svg.select('.x.axis').transition().duration(300).call(xAxis);
-  svg.select(".y.axis").transition().duration(300).call(yAxis);
-  
+var updateLabels = function(data){
   var text = svg.selectAll(".bartext").data(data);
+  
   text.exit()
     .transition()
     .duration(300)
     .attr("y", y(0))
     .style('fill-opacity', 1e-6)
     .remove();
-  
+
   text.enter()
     .append("text")
     .attr("class", "bartext")
     .attr("text-anchor", "middle")
     .attr("fill", "black")
-    .text(function(){ console.log(data[data.length-1].y); return Math.round(data[data.length-1].y * 1000)/10;})
+    .text( function(d){ return Math.round(d.y*1000)/10;})
     .attr("x", function(d){ 
       return x(d.x) + x.bandwidth()/2;
     })
     .attr("y", function(d){ return y(d.y);});
 
-    // the "UPDATE" set:
   text.transition()
     .duration(300)
     .attr("x", function(d){ 
       return x(d.x) + x.bandwidth()/2;
     })
     .attr("y", function(d){ return y(d.y);});
+
+  //updates the labels
+  d3.selectAll(".bartext").data(data)
+    .text(function(d){ return Math.round(d.y*1000)/10;});
+}
+
+var updateGraph = function(data){
+  console.log("x: " + data[data.length-1].x + " y: " + data[data.length-1].y);
+  x.domain(data.map(function(d) { return d.x; }));
+  y.domain([d3.min(data, function(d) { return d.y - 0.01; }), d3.max(data, function(d) { return d.y + 0.01; })]);
+  
+  svg.select('.x.axis').transition().duration(300).call(xAxis);
+  svg.select(".y.axis").transition().duration(300).call(yAxis);
 
   //Width and height
   var barPadding = -1;  
@@ -90,17 +95,17 @@ var updateGraph = function(data){
 
   bars.enter()
     .append("rect")
-    .attr("class", "bar")
-    .attr("x", function(d) {
-      return x(d.x);
-    })
-    .attr("y", function(d) {
-      return y(d.y);
-    })
-    .attr("width", x.bandwidth() + barPadding) 
-    .attr("height", function(d) {
-      return height - y(d.y); 
-    });
+      .attr("class", "bar")
+      .attr("x", function(d) {
+        return x(d.x);
+      })
+      .attr("y", function(d) {
+        return y(d.y);
+      })
+      .attr("width", x.bandwidth() + barPadding) 
+      .attr("height", function(d) {
+        return height - y(d.y); 
+      });
 
   // the "UPDATE" set:
   bars.transition()
