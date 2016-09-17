@@ -18,6 +18,8 @@ $(document).ready(function(){
 	$('#stop').click(function(){
 		//write message of how much you earned
 		//create a history of records of highest score
+		$("#myModal").modal();
+		$('#leadModal').text(lead);
 	});
 	$('#restart').click(function(){
 		//reset everything to the start
@@ -57,6 +59,7 @@ $(document).ready(function(){
 		var opponent = $('#opponent');
 		var result = parseInt(you.text()) - parseInt(opponent.text());
 		$("#lead").text(result);
+		return result;
 	}
 
 	var probability = function(){
