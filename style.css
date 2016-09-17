@@ -15,7 +15,12 @@ body{
 }
 #currentCard{
   display: inline-block;
-  /*vertical-align: middle;*/
+}
+.playingCard{
+  padding-top: 60%;
+  padding-bottom: 50%;
+  background-color: inherit;
+  border: none;
 }
 /* Logo*/
 .logo{
