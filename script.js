@@ -4,7 +4,11 @@ $(document).ready(function(){
 	var hand = [];
 
 	var tickIteration = 1;
-
+	$("#startGame").click(function() {
+	    $('html,body').animate({
+	        scrollTop: $(".section2").offset().top},
+	        'slow');
+	});
 	$('#draw').click(function(){
 		drawCard();
 		lead();

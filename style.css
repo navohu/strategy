@@ -5,12 +5,23 @@ body{
   -o-background-size: cover;
   background-size: cover;
 }
-
+/* Logo*/
 .logo{
   text-align: center;
 }
 .logo img{
-  width: 50%;
+  width: 100%;
+}
+
+/* Sections */
+.heightview{
+  height: 100vh;
+}
+.section2{
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 100vw;
 }
 /* Buttons */
 .myButton{
@@ -37,6 +48,10 @@ body{
 
 #restart{
   background: url(./img/replay-arrow.svg) no-repeat;
+}
+
+#startGame{
+  background: url(./img/right-arrow.svg) no-repeat;
 }
 
 /*--- Butoons*/
