@@ -11,8 +11,8 @@ $(document).ready(function(){
 	});
 	$('#draw').click(function(){
 		drawCard();
-		lead();
 		play();
+		lead();
 		tickIteration++;
 	});
 	$('#stop').click(function(){
